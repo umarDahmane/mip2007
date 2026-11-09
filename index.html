@@ -1,0 +1,585 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>ورشة تحديد الاستعارة</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap">
+<style>
+/* Layout: one 680px RTL column. Segmented tabs switch between the procedure guide and the practice area (sentence card + per-word worksheet that unlocks one question at a time). */
+:root{
+  --bg:#F2F5F8;
+  --surface:#FFFFFF;
+  --surface-2:#E8EDF3;
+  --ink:#15202B;
+  --muted:#55636F;
+  --line:#D3DBE3;
+  --accent:#2A4B9B;
+  --accent-ink:#FFFFFF;
+  --accent-soft:#E3EAFB;
+  --ok:#1B7A4B;
+  --ok-soft:#DDF1E5;
+  --bad:#B42318;
+  --bad-soft:#FBE4E1;
+  --f-display:'Amiri','Noto Naskh Arabic','Traditional Arabic',serif;
+  --f-body:'IBM Plex Sans Arabic','Segoe UI',Tahoma,system-ui,sans-serif;
+  --r:10px;
+  direction:rtl;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E131B;
+    --surface:#161D28;
+    --surface-2:#1E2734;
+    --ink:#E7ECF2;
+    --muted:#9AA8B6;
+    --line:#2B3645;
+    --accent:#8CAAF2;
+    --accent-ink:#0E1626;
+    --accent-soft:#1E2A47;
+    --ok:#5CCB92;
+    --ok-soft:#173528;
+    --bad:#F2877D;
+    --bad-soft:#3B1B19;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E131B;
+  --surface:#161D28;
+  --surface-2:#1E2734;
+  --ink:#E7ECF2;
+  --muted:#9AA8B6;
+  --line:#2B3645;
+  --accent:#8CAAF2;
+  --accent-ink:#0E1626;
+  --accent-soft:#1E2A47;
+  --ok:#5CCB92;
+  --ok-soft:#173528;
+  --bad:#F2877D;
+  --bad-soft:#3B1B19;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:400 16px/1.75 var(--f-body);
+  direction:rtl;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:20px 56px;
+}
+p,h1,h2,h3,dl,dd,ul,ol{margin:0}
+button{font:inherit}
+.app{max-width:680px;margin-inline:auto;display:grid;gap:18px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* header */
+.top{display:grid;gap:6px;padding-top:4px}
+.eyebrow{font-size:14px;color:var(--accent);font-weight:600}
+h1{font:700 clamp(32px,9vw,46px)/1.25 var(--f-display);text-wrap:balance}
+.lede{color:var(--muted);max-width:34em}
+
+/* tabs */
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;background:var(--surface-2);border-radius:var(--r)}
+.tab{min-height:44px;border:0;border-radius:7px;background:transparent;color:var(--muted);font-weight:500;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 0 0 1px var(--line)}
+
+/* shared */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;gap:14px;min-width:0}
+h2{font:700 24px/1.4 var(--f-display);text-wrap:balance}
+.panel{display:grid;gap:16px}
+.badge{display:inline-grid;place-items:center;flex:0 0 auto;min-width:28px;height:28px;padding:0 7px;border-radius:999px;background:var(--accent);color:var(--accent-ink);font:600 13px/1 var(--f-body)}
+.pill{display:inline-block;padding:2px 12px;border-radius:999px;font-size:13.5px;font-weight:600;line-height:1.7}
+.pill.m{background:var(--accent-soft);color:var(--accent)}
+.pill.l{background:var(--surface-2);color:var(--muted)}
+.btn{min-height:46px;padding:10px 20px;border-radius:8px;border:1.5px solid var(--accent);background:var(--accent);color:var(--accent-ink);font-weight:600;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+.muted{color:var(--muted)}
+
+/* guide */
+.steps{list-style:none;padding:0;display:grid;gap:18px;counter-reset:s}
+.steps>li{display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;counter-increment:s}
+.steps>li::before{content:counter(s);display:grid;place-items:center;width:34px;height:34px;border:1.5px solid var(--accent);border-radius:50%;color:var(--accent);font:700 18px/1 var(--f-display)}
+.steps b{font-weight:600}
+.steps .sub{list-style:none;padding:0;margin-top:8px;display:grid;gap:8px}
+.steps .sub li{display:flex;gap:10px;align-items:flex-start;background:var(--surface-2);border-radius:8px;padding:8px 12px}
+.steps .sub .badge{margin-top:1px}
+.crit{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.crit div{padding:10px 12px;border:1px solid var(--line);border-radius:8px;min-width:0}
+.crit dt{font-weight:600;color:var(--accent)}
+.crit dd{font-size:14.5px;color:var(--muted)}
+.ex-sentence{font:400 clamp(26px,7vw,34px)/1.9 var(--f-display)}
+.mark{background:var(--accent-soft);border-bottom:2px solid var(--accent);border-radius:4px 4px 0 0;padding:0 .12em}
+.kv{display:grid;gap:2px;padding-top:10px;border-top:1px solid var(--line)}
+.kv dt{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--muted)}
+.kv dd{padding-inline-start:36px}
+.callout{background:var(--accent-soft);border-radius:8px;padding:12px 14px;font-size:15px}
+.cta{display:flex;justify-content:flex-start}
+.foot{font-size:13px;color:var(--muted);display:grid;gap:4px;margin-top:6px}
+
+/* practice nav */
+.nav{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px}
+.pillnav{flex:0 0 auto;min-width:42px;height:42px;padding:0 12px;display:inline-flex;align-items:center;justify-content:center;gap:4px;border:1.5px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-weight:500;cursor:pointer}
+.pillnav.ok{border-color:var(--ok);color:var(--ok)}
+.pillnav.cur{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+
+/* sentence card */
+.kicker{display:flex;gap:10px;align-items:center;font-size:14.5px;color:var(--muted)}
+.sentence{font:400 clamp(28px,8vw,38px)/2.1 var(--f-display);color:var(--ink)}
+button.w{color:inherit;background:transparent;border:0;border-bottom:2px dotted var(--accent);padding:0 .12em;margin:0;border-radius:4px 4px 0 0;cursor:pointer;line-height:inherit}
+button.w:hover{background:var(--accent-soft)}
+button.w.dm{background:var(--accent-soft);border-bottom:2px solid var(--accent)}
+button.w.dl{border-bottom:2px solid var(--muted)}
+button.w[aria-pressed="true"]{box-shadow:0 0 0 2px var(--accent)}
+.gist{background:var(--surface-2);padding:10px 14px;border-radius:8px;font-size:15px}
+.gist b{font-weight:600}
+.legend{font-size:13px;color:var(--muted)}
+.lg{padding:0 .3em;border-radius:3px}
+.lg.l0{border-bottom:2px dotted var(--accent)}
+.lg.lm{background:var(--accent-soft);border-bottom:2px solid var(--accent)}
+.lg.ll{border-bottom:2px solid var(--muted)}
+
+/* worksheet */
+.sheet{display:grid;gap:12px;min-width:0}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.row{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;min-width:0}
+.row.current{border:1.5px solid var(--accent)}
+.row-head{display:flex;gap:10px;align-items:flex-start}
+.q{font-weight:500;line-height:1.6;min-width:0;padding-top:1px}
+.note{margin-top:6px;font-size:14px;color:var(--muted);padding-inline-start:38px}
+.opts{display:grid;gap:8px;margin-top:12px}
+.opt-item{display:grid;gap:4px}
+.opt{width:100%;min-height:48px;padding:11px 14px;text-align:start;background:var(--surface);color:var(--ink);border:1.5px solid var(--line);border-radius:8px;cursor:pointer;line-height:1.6}
+.opt:hover:not(:disabled){border-color:var(--accent);background:var(--accent-soft)}
+.opt:disabled{color:var(--ink);cursor:default}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.hint{font-size:14px;color:var(--bad);padding-inline:4px}
+.hint::before{content:"✗ ";font-weight:700}
+.row.done .q{color:var(--muted)}
+.ans{margin-top:10px;padding:10px 12px;border-radius:8px;background:var(--ok-soft)}
+.tick{color:var(--ok);font-weight:700;margin-inline-end:8px}
+.why{margin-top:8px;font-size:14.5px;color:var(--muted)}
+.next{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:14px 16px;background:var(--accent-soft);border-radius:var(--r)}
+.next p{flex:1 1 220px}
+
+/* results */
+.big{font:700 clamp(44px,13vw,68px)/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.big small{font:400 22px var(--f-body);color:var(--muted)}
+.rev{list-style:none;padding:0;display:grid;gap:10px}
+.rev li{border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:grid;gap:6px;min-width:0}
+.rev .tt{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.rev .wd{font:700 22px/1.4 var(--f-display)}
+.rev .btn{min-height:40px;padding:6px 14px;justify-self:start;font-size:14px}
+
+@media (prefers-reduced-motion:no-preference){
+  .opt,.pillnav,.tab,button.w{transition:background-color .15s,border-color .15s}
+}
+</style>
+
+<div class="app" dir="rtl" lang="ar">
+  <header class="top">
+    <p class="eyebrow">إجراء براغلجاز · <span dir="ltr">MIP</span></p>
+    <h1>ورشة تحديد الاستعارة</h1>
+    <p class="lede">تدرَّب على الحكم بأن كلمة ما استعارية أو حرفية، بالخطوات نفسها التي يتبعها الباحثون في تحليل النصوص.</p>
+  </header>
+
+  <div class="tabs" role="tablist" aria-label="أقسام الورشة">
+    <button class="tab" role="tab" id="tab-guide" data-tab="guide" aria-selected="true" aria-controls="guide">الإجراء</button>
+    <button class="tab" role="tab" id="tab-practice" data-tab="practice" aria-selected="false" aria-controls="practice">التدريب</button>
+  </div>
+
+  <section id="guide" class="panel" role="tabpanel" aria-labelledby="tab-guide">
+    <div class="card">
+      <h2>الخطوات الأربع</h2>
+      <ol class="steps">
+        <li><div><b>اقرأ النص كاملًا</b><p class="muted">لتفهم معناه العام قبل الحكم على أي كلمة.</p></div></li>
+        <li><div><b>حدّد الوحدات المعجمية</b><p class="muted">أي الكلمات. تُحلَّل كل كلمة على حدة.</p></div></li>
+        <li><div><b>لكل كلمة، أجب عن ثلاثة أسئلة</b>
+          <ul class="sub">
+            <li><span class="badge">3أ</span><span>ما معناها في هذا السياق؟</span></li>
+            <li><span class="badge">3ب</span><span>هل لها معنى أساسي معاصر في سياقات أخرى؟</span></li>
+            <li><span class="badge">3ج</span><span>هل يختلف المعنى السياقي عن الأساسي، ويمكن فهمه بمقارنته به؟</span></li>
+          </ul>
+          <p class="callout" style="margin-top:10px">المقصود بالاختلاف أن المعنيين متمايزان، لا أن أحدهما عكس الآخر. فالانشغال والغمر بالماء مختلفان، وليسا ضدّين.</p></div></li>
+        <li><div><b>احكم على الكلمة</b><p class="muted">إن كان الجواب عن 3ج «نعم» فالكلمة استعارية، وإلا فهي حرفية.</p></div></li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h2>كيف تعرف المعنى الأساسي؟</h2>
+      <dl class="crit">
+        <div><dt>الأكثر ملموسية</dt><dd>ما يسهل تخيّله وإحساسه.</dd></div>
+        <div><dt>المرتبط بالجسد</dt><dd>ما يتصل بحركة الجسد وأفعاله.</dd></div>
+        <div><dt>الأدق</dt><dd>ما كان أكثر تحديدًا من غيره.</dd></div>
+        <div><dt>الأقدم تاريخيًا</dt><dd>ما سبق غيره في الاستعمال.</dd></div>
+      </dl>
+      <p class="muted">المعنى الأساسي ليس بالضرورة الأشيع. ويُرجع إلى المعجم للتأكد.</p>
+    </div>
+
+    <div class="card">
+      <h2>مثال محلول</h2>
+      <p class="ex-sentence">«<span class="mark">غرقتُ</span> في العمل حتى الفجر.»</p>
+      <dl style="display:grid;gap:10px">
+        <div class="kv"><dt><span class="badge">1</span>المعنى العام</dt><dd>انشغلتُ بالعمل انشغالًا شديدًا حتى الفجر.</dd></div>
+        <div class="kv"><dt><span class="badge">3أ</span>المعنى السياقي</dt><dd>الانشغال الشديد بالعمل.</dd></div>
+        <div class="kv"><dt><span class="badge">3ب</span>المعنى الأساسي</dt><dd>الهبوط في الماء حتى يغمر الجسم، وهو أكثر ملموسية وارتباطًا بالجسد.</dd></div>
+        <div class="kv"><dt><span class="badge">3ج</span>الاختلاف والمقارنة</dt><dd>المعنيان مختلفان، ونفهم الانشغال بمقارنته بالغمر بالماء.</dd></div>
+        <div class="kv"><dt><span class="badge">4</span>الحكم</dt><dd><span class="pill m">استعارية</span></dd></div>
+      </dl>
+      <p class="callout">الاستعارات الشائعة مثل «ارتفعت الأسعار» تُحسب استعارية أيضًا، لأن الإجراء يفحص المعنى لا مدى شيوع التعبير.</p>
+    </div>
+
+    <div class="cta"><button class="btn" data-go="practice">ابدأ التدريب</button></div>
+
+    <div class="foot">
+      <p>المرجع: <span dir="ltr">Pragglejaz Group (2007). MIP: A method for identifying metaphorically used words in discourse. Metaphor and Symbol, 22(1), 1–39.</span></p>
+      <p>وللإجراء نسخة موسّعة تُعرف باسم <span dir="ltr">MIPVU</span> (ستين وزملاؤه، 2010).</p>
+    </div>
+  </section>
+
+  <section id="practice" class="panel" role="tabpanel" aria-labelledby="tab-practice" hidden></section>
+</div>
+
+<script>
+(function(){
+document.documentElement.setAttribute('dir','rtl');
+document.documentElement.setAttribute('lang','ar');
+
+const $=(s,r=document)=>r.querySelector(s);
+const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* Each option is [text, hint-when-wrong]. ok = index of the correct option. type: M = metaphorical, L = literal. */
+const EX=[
+ {
+  tokens:["غرقتُ","في","العمل","حتى","الفجر","."],
+  gist:"انشغلتُ بالعمل انشغالًا شديدًا ولم أتوقف إلا مع طلوع الفجر.",
+  words:{
+   0:{type:"M",
+    ctx:{o:[["هبطتُ في الماء حتى غمرني","هذا معنى الكلمة في سياق الماء والسباحة، ولا ماء في هذه الجملة."],["انشغلتُ بالعمل انشغالًا شديدًا"],["أصابني النعاس والتعب","قد يكون التعب نتيجة السهر، لكنه ليس معنى الكلمة نفسها هنا."]],ok:1,
+     why:"السياق عمل متواصل حتى الفجر، فالمعنى هو الانشغال الشديد."},
+    basic:{o:[["الانشغال الشديد بأمر ما","هذا هو المعنى السياقي نفسه، والمطلوب معنى آخر في سياقات أخرى."],["الشعور بحزن عميق","هذا معنى مجرد، وليس أكثر ملموسية."],["الهبوط في الماء حتى يغمر الجسمَ"]],ok:2,
+     why:"معنى حسّي ملموس مرتبط بالجسد وبالماء، وهو أكثر ملموسية من الانشغال."},
+    contrast:{why:"الانشغال (السياقي) يختلف عن الغمر بالماء (الأساسي)، ونفهمه بمقارنة العمل بماء يغمرنا."},
+    verdict:{why:"عومل العمل كأنه ماء، والانشغال به كأنه غرق فيه."}},
+   4:{type:"L",
+    ctx:{o:[["الوقت الذي يبدأ فيه ضوء النهار قبل شروق الشمس"],["بداية مرحلة جديدة مشرقة","هذا استعمال مشتق في عبارات مثل «فجر الحضارة»، ولا يناسب هذه الجملة."],["ضوء الشمس القوي وقت الظهر","الفجر يسبق الشروق، ولا يكون وقت الظهر."]],ok:0,
+     why:"الجملة تتحدث عن العمل ساعات الليل حتى الصباح الباكر."},
+    basic:{o:[["بداية مرحلة جديدة، كما في «فجر الحضارة»","معنى مشتق ومجرد، وليس أكثر ملموسية."],["الأمل بعد اليأس","معنى مجرد، وليس أكثر ملموسية."],["الوقت الذي يبدأ فيه ضوء النهار قبل شروق الشمس"]],ok:2,
+     why:"المعنى المحدد في الجملة هو نفسه المعنى الحسّي الأساسي، ولا معنى أكثر ملموسية منه."},
+    contrast:{why:"المعنى السياقي هو المعنى الأساسي نفسه."},
+    verdict:{why:"الكلمة مستعملة بمعناها الأصلي."}}
+  }
+ },
+ {
+  tokens:["أحاول","أن","أبني","علاقة","قوية","مع","زملائي","."],
+  gist:"أسعى إلى تكوين صلة متينة بزملائي في العمل أو في الدراسة.",
+  words:{
+   2:{type:"M",
+    ctx:{o:[["أُشيّد بيتًا من الحجر والطوب","هذا معنى الكلمة في البناء الفعلي، ولا شيء يُشيَّد بالحجر هنا."],["أُصلح علاقة تضرّرت","الجملة تتحدث عن إنشاء علاقة جديدة، لا عن إصلاح علاقة قائمة."],["أُكوِّن العلاقة وأُنشئها بالتدريج"]],ok:2,
+     why:"الفعل مع «علاقة» يعني التكوين والإنشاء شيئًا فشيئًا."},
+    basic:{o:[["تشييد مبنى بوضع مواد البناء بعضها فوق بعض"],["تكوين علاقة وإنشاؤها بالتدريج","هذا هو المعنى السياقي نفسه."],["وضع خطة وإعدادها على الورق","هذا معنى مجرد، وليس أكثر ملموسية."]],ok:0,
+     why:"معنى حسّي ملموس يرتبط بحركة اليدين والمواد."},
+    contrast:{why:"تكوين العلاقة يختلف عن تشييد مبنى، ونفهمه بمقارنة العلاقة ببناء يُرفع طبقة فوق طبقة."},
+    verdict:{why:"العلاقة تُعامل كأنها بناء يُشيَّد."}},
+   4:{type:"M",
+    ctx:{o:[["ذات عضلات وقدرة بدنية كبيرة","هذا معناها حين نصف الأجسام، والعلاقة ليست جسدًا."],["متينة وثابتة لا تنهار بسهولة"],["مليئة بالانفعال والصراخ","هذا لا يناسب وصف العلاقة هنا."]],ok:1,
+     why:"الوصف يتعلق بمتانة العلاقة وثباتها."},
+    basic:{o:[["شديدة التأثير في النفس","هذا معنى مجرد، وليس أكثر ملموسية."],["متينة وثابتة لا تنهار بسهولة","هذا هو المعنى السياقي نفسه."],["ذات قوة جسدية وقدرة بدنية"]],ok:2,
+     why:"القوة الجسدية أكثر ملموسية وحسّية من متانة العلاقة."},
+    contrast:{why:"متانة العلاقة تختلف عن قوة الجسد، ونفهمها بمقارنتها بجسم قوي لا ينكسر."},
+    verdict:{why:"استعارية غير مباشرة: وُصفت العلاقة بصفة تخص الأجسام."}}
+  }
+ },
+ {
+  tokens:["ارتفعت","الأسعار","في","الأسواق","هذا","الشهر","."],
+  gist:"زادت أسعار السلع في الأسواق خلال هذا الشهر.",
+  words:{
+   0:{type:"M",
+    ctx:{o:[["علا صوتها واشتد ضجيجها","الجملة لا تتحدث عن الصوت."],["زادت وصارت أغلى"],["صعدت إلى مكان أعلى","هذا معناها في الحركة المكانية، ولا أحد يصعد هنا."]],ok:1,
+     why:"الفاعل هو «الأسعار»، فالمعنى أنها زادت."},
+    basic:{o:[["الانتقال إلى مكان أعلى في الفضاء"],["الزيادة في القيمة أو الكمية","هذا هو المعنى السياقي نفسه."],["علوّ المكانة والشأن","هذا معنى مجرد، وليس أكثر ملموسية."]],ok:0,
+     why:"الصعود في المكان معنى جسدي ملموس."},
+    contrast:{why:"زيادة الأسعار تختلف عن الصعود في المكان، ونفهمها بمقارنة الكمّ بشيء يصعد إلى أعلى."},
+    verdict:{why:"استعارية. وهي استعارة شائعة حتى لا ننتبه إليها، لكنها تُحسب استعارية في هذا الإجراء."}},
+   3:{type:"L",
+    ctx:{o:[["أماكن يلتقي فيها الباعة والمشترون للبيع والشراء"],["شوارع واسعة تمر بها السيارات","لا علاقة لهذا بالسياق."],["مجالس يجتمع فيها المسؤولون لاتخاذ القرارات","لا علاقة لهذا بالسياق."]],ok:0,
+     why:"الأسعار تُحدَّد في أماكن البيع والشراء."},
+    basic:{o:[["نظام العرض والطلب في الاقتصاد","معنى مجرد ومشتق، وليس أكثر ملموسية."],["مجال النشاط التجاري لشركة ما","معنى أوسع وأكثر تجريدًا."],["أماكن يلتقي فيها الباعة والمشترون للبيع والشراء"]],ok:2,
+     why:"المكان الفعلي للبيع والشراء هو المعنى الأكثر ملموسية، وهو المستعمل هنا."},
+    contrast:{why:"المعنى السياقي هو المعنى الأساسي نفسه."},
+    verdict:{why:"الكلمة تدل على أماكن حقيقية."}}
+  }
+ },
+ {
+  tokens:["يمرّ","الوقتُ","سريعًا","حين","نستمتع","."],
+  gist:"نشعر أن الزمن ينقضي بسرعة حين نقضيه في أمر ممتع.",
+  words:{
+   0:{type:"M",
+    ctx:{o:[["يعبر جسم أمام شخص ويتجاوزه","هذا معناه في الحركة، والفاعل هنا الوقت لا جسم."],["يزور شخصًا زيارة قصيرة","لا علاقة لهذا بالسياق."],["ينقضي ويتقدم"]],ok:2,
+     why:"الفاعل هو «الوقت»، فالمعنى أنه ينقضي."},
+    basic:{o:[["الانتقال في طريق واجتياز مكان أو نقطة معينة"],["انقضاء الزمن","هذا هو المعنى السياقي نفسه."],["عيش تجربة والمرور بها","هذا معنى مجرد، وليس أكثر ملموسية."]],ok:0,
+     why:"اجتياز المكان حركة جسدية ملموسة."},
+    contrast:{why:"انقضاء الزمن يختلف عن عبور جسم في المكان، ونفهمه بمقارنة الزمن بجسم يتحرك أمامنا."},
+    verdict:{why:"الزمن يُعامل كأنه شيء يتحرك ويعبر."}}
+  }
+ },
+ {
+  tokens:["يمرّ","القطار","أمام","بيتي","كل","صباح","."],
+  gist:"يعبر القطار قرب بيتي في كل صباح.",
+  words:{
+   0:{type:"L",
+    ctx:{o:[["ينقضي ويتقدم، كما يمرّ الزمن","هذا استعمال للزمن، والفاعل هنا قطار."],["يتحرك فيجتاز المكان أمام البيت"],["يتوقف في مكانه","هذا عكس المقصود."]],ok:1,
+     why:"القطار جسم يتحرك ويجتاز المكان."},
+    basic:{o:[["انقضاء الزمن","معنى مشتق ومجرد."],["عيش تجربة والمرور بها","هذا معنى مجرد، وليس أكثر ملموسية."],["الانتقال في طريق واجتياز مكان أو نقطة معينة"]],ok:2,
+     why:"المعنى السياقي هنا هو الحركة الجسدية نفسها."},
+    contrast:{why:"المعنى السياقي هو المعنى الأساسي نفسه."},
+    verdict:{why:"الكلمة نفسها استعارية في «يمرّ الوقتُ سريعًا»، وحرفية هنا. الحكم يتغير بتغير السياق."}}
+  }
+ },
+ {
+  tokens:["وضعتُ","الكتاب","على","الطاولة","."],
+  gist:"أنزلتُ الكتاب من يدي وجعلتُه فوق الطاولة.",
+  words:{
+   0:{type:"L",
+    ctx:{o:[["ألّفتُ الكتاب وكتبتُه","هذا معنى آخر للفعل في عبارة «وضع كتابًا»، ولا يناسب وجود الطاولة."],["أعددتُ له خطة","لا علاقة لهذا بالسياق."],["جعلتُه في مكان معين بيدي"]],ok:2,
+     why:"ذكر «على الطاولة» يدل على المكان الذي جُعل فيه الكتاب."},
+    basic:{o:[["جعل شيء في مكان معين بإنزاله من اليد"],["تأليف كتاب أو صياغة قانون","معنى مشتق ومجرد، وليس أكثر ملموسية."],["تنظيم أمر وفق خطة","معنى مجرد، وليس أكثر ملموسية."]],ok:0,
+     why:"الفعل الجسدي بإنزال الشيء من اليد هو المعنى الملموس، وهو المستعمل هنا."},
+    contrast:{why:"المعنى السياقي هو المعنى الأساسي نفسه."},
+    verdict:{why:"الكلمة تدل على فعل جسدي حقيقي."}},
+   3:{type:"L",
+    ctx:{o:[["مجلس يجتمع فيه المتفاوضون للحوار","هذا معنى مجازي في «طاولة المفاوضات»، ولا يناسب هنا."],["قطعة أثاث لها سطح مستوٍ تُوضع عليه الأشياء"],["سبورة الفصل","لا علاقة لهذا بالسياق."]],ok:1,
+     why:"الكتاب يُوضع على سطح قطعة أثاث."},
+    basic:{o:[["مجلس الحوار والتفاوض، كما في «طاولة المفاوضات»","معنى مشتق، وليس أكثر ملموسية."],["الجلسة الرسمية لمناقشة موضوع ما","معنى مجرد، وليس أكثر ملموسية."],["قطعة أثاث لها سطح مستوٍ تُوضع عليه الأشياء"]],ok:2,
+     why:"قطعة الأثاث الحسّية هي الأساس، وهي المعنى المستعمل هنا."},
+    contrast:{why:"المعنى السياقي هو المعنى الأساسي نفسه."},
+    verdict:{why:"الكلمة تدل على شيء مادي حقيقي."}}
+  }
+ },
+ {
+  tokens:["هاجم","الناقدُ","أفكاري","بشدة","."],
+  gist:"انتقد الناقد أفكاري انتقادًا قاسيًا.",
+  words:{
+   0:{type:"M",
+    ctx:{o:[["انتقد انتقادًا قاسيًا"],["اقتحم مكانًا بالسلاح","هذا معنى الكلمة في القتال، والجملة عن الأفكار."],["ابتعد عن الحوار وانسحب","لا علاقة لهذا بالسياق."]],ok:0,
+     why:"الجملة تتحدث عن ناقد وأفكار، فالمعنى أنه انتقدها بقسوة."},
+    basic:{o:[["انتقاد الرأي انتقادًا قاسيًا","هذا هو المعنى السياقي نفسه."],["الاعتداء على العدو أو المكان بالقوة في القتال"],["الغضب الشديد والصراخ","هذا معنى مجرد، وليس أكثر ملموسية."]],ok:1,
+     why:"الاعتداء المادي في القتال معنى جسدي ملموس."},
+    contrast:{why:"انتقاد الأفكار يختلف عن الاعتداء بالقوة، ونفهمه بمقارنة النقاش بمعركة."},
+    verdict:{why:"الحوار يُعامل كأنه حرب، والأفكار كأنها موقع يُهاجَم."}}
+  }
+ }
+];/*EX-END*/
+
+const S={tab:'guide',ex:0,w:null,rec:{},focus:false,scrollSheet:false,toTop:false,exChanged:false};
+const targets=e=>Object.keys(EX[e].words).map(Number);
+const key=(e,w)=>e+':'+w;
+const getRec=(e,w)=>S.rec[key(e,w)]||(S.rec[key(e,w)]={stage:0,wrong:[[],[],[],[]]});
+const stageOf=(e,w)=>S.rec[key(e,w)]?S.rec[key(e,w)].stage:0;
+const isDone=(e,w)=>stageOf(e,w)>=4;
+const exDone=e=>targets(e).every(w=>isDone(e,w));
+const pill=t=>t==='M'?'<span class="pill m">استعارية</span>':'<span class="pill l">حرفية</span>';
+
+function questions(wd){
+  const M=wd.type==='M';
+  return [
+    {b:'3أ',q:'ما معنى الكلمة في هذه الجملة تحديدًا؟',o:wd.ctx.o,ok:wd.ctx.ok,why:wd.ctx.why,
+      tip:'ارجع إلى الجملة كاملة وانظر إلى معنى الكلمة هنا.'},
+    {b:'3ب',q:'ما المعنى الأساسي للكلمة في سياقات أخرى؟',note:'الأساسي هو الأكثر ملموسية، أو المرتبط بحركة الجسد، أو الأدق. وليس بالضرورة الأشيع.',
+      o:wd.basic.o,ok:wd.basic.ok,why:wd.basic.why,
+      tip:'ابحث عن المعنى الأكثر ملموسية أو الأقرب إلى الجسد.'},
+    {b:'3ج',q:'هل يختلف المعنى السياقي عن الأساسي، ويمكن فهمه بمقارنته به؟',
+      note:'الاختلاف هنا يعني أن المعنيين متمايزان، لا أن أحدهما عكس الآخر.',
+      o:[['نعم، يختلفان ويُفهم السياقي بمقارنته بالأساسي','المعنيان واحد هنا، فلا اختلاف بينهما.'],
+         ['لا، المعنى واحد في الحالتين','قارن بين المعنيين في الخطوتين السابقتين: بينهما اختلاف يمكن فهمه بالمقارنة.']],
+      ok:M?0:1,why:wd.contrast.why,tip:''},
+    {b:'4',q:'ما حكمك على الكلمة؟',
+      o:[['استعارية','المعنى السياقي والأساسي واحد، فلا تُعدّ الكلمة استعارية هنا.'],
+         ['حرفية','وجود معنى أساسي مختلف يُفهم السياقي بمقارنته به يجعل الكلمة استعارية.']],
+      ok:M?0:1,why:wd.verdict.why,tip:''}
+  ];
+}
+
+function navHTML(){
+  let h='';
+  EX.forEach((_,i)=>{
+    const d=exDone(i);
+    h+=`<button class="pillnav${S.ex===i?' cur':''}${d?' ok':''}" data-act="goex" data-e="${i}" aria-label="التمرين ${i+1}${d?' (مكتمل)':''}"${S.ex===i?' aria-current="true"':''}>${i+1}${d?'<span aria-hidden="true">✓</span>':''}</button>`;
+  });
+  h+=`<button class="pillnav${S.ex===EX.length?' cur':''}" data-act="goex" data-e="${EX.length}"${S.ex===EX.length?' aria-current="true"':''}>النتيجة</button>`;
+  return h;
+}
+
+function sentenceHTML(e){
+  const ex=EX[e];let out='';
+  ex.tokens.forEach((t,i)=>{
+    const punct=/^[.،؟!]$/.test(t);
+    if(i&&!punct)out+=' ';
+    const wd=ex.words[i];
+    if(wd){
+      const done=isDone(e,i);
+      const cls='w'+(done?(wd.type==='M'?' dm':' dl'):'');
+      const state=done?(wd.type==='M'?'، استعارية':'، حرفية'):'';
+      out+=`<button class="${cls}" data-act="word" data-w="${i}" aria-pressed="${S.w===i}" aria-label="${t}${state}">${t}</button>`;
+    }else out+=`<span>${t}</span>`;
+  });
+  return out;
+}
+
+function nextHTML(e){
+  const rem=targets(e).filter(x=>!isDone(e,x));
+  if(rem.length){
+    const btns=rem.map(x=>`<button class="btn" data-act="word" data-w="${x}">حلّل «${EX[e].tokens[x]}»</button>`).join('');
+    return `<div class="next"><p>اكتمل تحليل هذه الكلمة. بقي في الجملة ${rem.length>1?'كلمات':'كلمة'} للتحليل.</p>${btns}</div>`;
+  }
+  const last=e>=EX.length-1;
+  return `<div class="next"><p>اكتمل تحليل كلمات هذه الجملة.</p><button class="btn" data-act="goex" data-e="${e+1}">${last?'عرض النتيجة':'التمرين التالي'}</button></div>`;
+}
+
+function sheetHTML(e,w){
+  const ex=EX[e],wd=ex.words[w],r=getRec(e,w),Q=questions(wd);
+  let h=`<div class="sheet-head"><h2>تحليل «${ex.tokens[w]}»</h2>${r.stage>=4?pill(wd.type):''}</div>`;
+  const upto=Math.min(r.stage+1,4);
+  for(let i=0;i<upto;i++){
+    const q=Q[i];
+    const head=`<div class="row-head"><span class="badge">${q.b}</span><p class="q">${q.q}</p></div>`;
+    if(i<r.stage){
+      h+=`<div class="row done">${head}<p class="ans"><span class="tick" aria-hidden="true">✓</span>${q.o[q.ok][0]}</p><p class="why">${q.why}</p></div>`;
+    }else{
+      const wrong=r.wrong[i];
+      h+=`<div class="row current">${head}${q.note?`<p class="note">${q.note}</p>`:''}<div class="opts" role="group" aria-label="${q.q}">`;
+      q.o.forEach((o,j)=>{
+        const bad=wrong.includes(j);
+        h+=`<div class="opt-item"><button class="opt${bad?' wrong':''}" data-i="${i}" data-j="${j}"${bad?' disabled':''}>${o[0]}</button>${bad?`<p class="hint" role="status">${o[1]||q.tip}</p>`:''}</div>`;
+      });
+      h+=`</div></div>`;
+    }
+  }
+  if(r.stage>=4)h+=nextHTML(e);
+  return h;
+}
+
+function stats(){
+  let answered=0,first=0,total=0,doneWords=0;const review=[],pending=[];
+  EX.forEach((_,e)=>targets(e).forEach(w=>{
+    total++;
+    const r=S.rec[key(e,w)];const st=r?r.stage:0;
+    answered+=st;
+    for(let i=0;i<st;i++)if(!r.wrong[i].length)first++;
+    if(st>=4)doneWords++;else pending.push([e,w]);
+    if(r&&r.wrong.some(a=>a.length))review.push([e,w]);
+  }));
+  return{answered,first,total,doneWords,review,pending};
+}
+
+function resultHTML(){
+  const s=stats();
+  let msg;
+  if(!s.answered)msg='لم تبدأ التحليل بعد. اختر تمرينًا من الشريط أعلاه.';
+  else{
+    const p=s.first/s.answered;
+    msg=p>=0.85?'أداء ممتاز: الخطوات مطبّقة بدقة.':p>=0.6?'أداء جيد. راجع الكلمات المعروضة أدناه.':'راجع خطوات الإجراء، ثم أعد تحليل الكلمات المعروضة أدناه.';
+  }
+  let h=`<article class="card"><p class="kicker">النتيجة</p>`;
+  if(s.answered)h+=`<p class="big">${s.first} <small>من ${s.answered}</small></p><p>إجابة صحيحة من المحاولة الأولى</p>`;
+  h+=`<p class="muted">اكتمل تحليل ${s.doneWords} كلمات من ${s.total}.</p><p>${msg}</p></article>`;
+  if(s.review.length){
+    h+=`<article class="card"><h2>للمراجعة</h2><ul class="rev">`;
+    s.review.forEach(([e,w])=>{
+      const wd=EX[e].words[w];
+      h+=`<li><div class="tt"><span class="wd">${EX[e].tokens[w]}</span>${pill(wd.type)}</div><p class="muted">المعنى الأساسي: ${wd.basic.o[wd.basic.ok][0]}</p><button class="btn ghost" data-act="redo" data-e="${e}" data-w="${w}">أعد تحليلها</button></li>`;
+    });
+    h+=`</ul></article>`;
+  }
+  if(s.pending.length){
+    h+=`<article class="card"><h2>لم تُحلَّل بعد</h2><ul class="rev">`;
+    s.pending.forEach(([e,w])=>{
+      h+=`<li><div class="tt"><span class="wd">${EX[e].tokens[w]}</span><span class="muted">التمرين ${e+1}</span></div><button class="btn ghost" data-act="goex" data-e="${e}" data-w="${w}">حلّلها</button></li>`;
+    });
+    h+=`</ul></article>`;
+  }
+  h+=`<div class="cta"><button class="btn ghost" data-act="reset">ابدأ من جديد</button>${s.answered&&s.first/s.answered<0.6?'<button class="btn" style="margin-inline-start:10px" data-go="guide">راجع الإجراء</button>':''}</div>`;
+  return h;
+}
+
+function renderPractice(){
+  const root=$('#practice');
+  const oldNav=$('.nav',root);const sl=oldNav?oldNav.scrollLeft:0;
+  let h=`<nav class="nav" aria-label="التمارين">${navHTML()}</nav>`;
+  if(S.ex>=EX.length)h+=resultHTML();
+  else{
+    const e=S.ex,ex=EX[e];
+    h+=`<article class="card"><p class="kicker"><span class="badge">1</span>اقرأ الجملة كاملة وافهم معناها العام</p>
+      <p class="sentence">${sentenceHTML(e)}</p>
+      <p class="gist"><b>المعنى العام:</b> ${ex.gist}</p>
+      <p class="kicker"><span class="badge">2</span>اضغط كلمة ذات خط منقّط لتحليلها</p>
+      <p class="legend"><span class="lg l0">منقّطة</span> لم تُحلَّل بعد · <span class="lg lm">مظلّلة</span> استعارية · <span class="lg ll">مسطّرة</span> حرفية</p></article>
+      <div class="sheet" aria-live="polite">${S.w!=null?sheetHTML(e,S.w):''}</div>`;
+  }
+  root.innerHTML=h;
+  const nav=$('.nav',root);
+  if(S.exChanged){const c=$('.pillnav.cur',nav);if(c)c.scrollIntoView({block:'nearest',inline:'center'});}
+  else nav.scrollLeft=sl;
+  const beh=reduce?'auto':'smooth';
+  if(S.toTop){$('.tabs').scrollIntoView({block:'start',behavior:beh});}
+  else if(S.focus){
+    const el=$('.row.current .opt:not([disabled])',root)||$('.next .btn',root);
+    if(el)el.focus({preventScroll:true});
+    const t=$('.row.current',root)||$('.next',root);
+    if(t)t.scrollIntoView({block:'nearest',behavior:beh});
+  }else if(S.scrollSheet){
+    const t=$('.sheet',root);if(t)t.scrollIntoView({block:'nearest',behavior:beh});
+  }
+  S.focus=S.scrollSheet=S.toTop=S.exChanged=false;
+}
+
+function goex(e,w){
+  S.ex=e;S.exChanged=true;S.toTop=true;
+  if(e<EX.length){
+    const t=targets(e);
+    S.w=w!==undefined?w:(t.find(x=>!isDone(e,x)));
+    if(S.w===undefined)S.w=t[0];
+  }else S.w=null;
+  renderPractice();
+}
+
+function answer(i,j){
+  const e=S.ex,w=S.w;
+  if(w==null)return;
+  const r=getRec(e,w);
+  if(i!==r.stage)return;
+  const q=questions(EX[e].words[w])[i];
+  if(j===q.ok)r.stage++;
+  else if(!r.wrong[i].includes(j))r.wrong[i].push(j);
+  S.focus=true;
+  renderPractice();
+}
+
+function setTab(t){
+  S.tab=t;
+  $('#guide').hidden=t!=='guide';
+  $('#practice').hidden=t!=='practice';
+  document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.tab===t)));
+  if(t==='practice'){
+    if(S.w==null&&S.ex<EX.length){S.w=targets(S.ex)[0];}
+    renderPractice();
+  }
+}
+
+document.addEventListener('click',ev=>{
+  const b=ev.target.closest('button');
+  if(!b)return;
+  if(b.dataset.tab){setTab(b.dataset.tab);return;}
+  if(b.dataset.go){setTab(b.dataset.go);$('.tabs').scrollIntoView({block:'start',behavior:reduce?'auto':'smooth'});return;}
+  if(!b.closest('#practice'))return;
+  if(b.classList.contains('opt')){answer(+b.dataset.i,+b.dataset.j);return;}
+  const a=b.dataset.act;
+  if(a==='word'){S.w=+b.dataset.w;S.scrollSheet=true;renderPractice();}
+  else if(a==='goex'){goex(+b.dataset.e,b.dataset.w!==undefined?+b.dataset.w:undefined);}
+  else if(a==='redo'){delete S.rec[key(+b.dataset.e,+b.dataset.w)];goex(+b.dataset.e,+b.dataset.w);}
+  else if(a==='reset'){S.rec={};goex(0);}
+});
+})();
+</script>
+
+</body></html>
